@@ -26,13 +26,59 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+
+    
+    const taskCollection = client.db('scicDb').collection('scic');
+
+
+// add item 
+ app.post('/scic', async(req,res)=>{
+   const task = req.body;
+   const result = await taskCollection.insertOne(task)
+   res.send(result);
+ })
+
+// get item all
+ app.get('/scic', async(req, res)=>{
+  const cursor = taskCollection.find();
+  const result = await cursor.toArray();
+  res.send(result);
+})
+
+// get item by id
+// app.get('/scic/:id', async(req, res)=>{
+//   const id =req.params.id
+//   const query = {_id: new ObjectId(id)}
+//   const result = await taskCollection.findOne(query);
+//   res.send(result);
+// })
+
+
+// get item by id
+// app.get('/scic/:id', async (req, res) => {
+//   const id = req.params.id;
+//   const query = { _id: new ObjectId(id) }
+//   const result = await taskCollection.find(query).toArray();
+//   res.send(result);
+// })
+
+// delete one by id
+// app.delete('/scic/:id' , async(req, res)=>{
+//   const id = req.params.id;
+//  const query = {_id: new ObjectId(id)}
+//  const result = await taskCollection.deleteOne(query);
+//  res.send(result);
+// })
+
+
+
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
